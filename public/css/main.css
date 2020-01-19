@@ -176,6 +176,7 @@ form {
 .card__header,
 .card__content {
   padding: 1rem;
+  text-align: center;
 }
 
 .card__header h1,

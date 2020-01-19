@@ -1,31 +1,62 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const Image = require('../models/images');
 
-exports.getProducts = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      console.log(products);
-      res.render('shop/product-list', {
+exports.getProducts = async (req, res, next) => {
+  try{
+    let imagesArr = [];
+    let products = await Product.find();
+    for (product of products){
+      let images = await Image.find({productId: product._id})
+      if(images && images.length >0) imagesArr.push(images[0]);
+    }
+    console.log(imagesArr[0].imageUrl);
+      return res.render('shop/product-list', {
         prods: products,
         pageTitle: 'All Products',
-        path: '/products'
+        path: '/products',
+        images: imagesArr
       });
-    })
-    .catch(err => {
+  }
+   catch(err){
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+  }
+
+  // Product.find()
+  //   .then(products => {
+  //     console.log(products);
+  //     res.render('shop/product-list', {
+  //       prods: products,
+  //       pageTitle: 'All Products',
+  //       path: '/products'
+  //     });
+  //   })
+  //   .catch(err => {
+  //     const error = new Error(err);
+  //     error.httpStatusCode = 500;
+  //     return next(error);
+  //   });
 };
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
   Product.findById(prodId)
     .then(product => {
-      res.render('shop/product-detail', {
-        product: product,
-        pageTitle: product.title,
-        path: '/products'
+      Image.find({productId:prodId}).then(images => {
+        res.render('shop/product-detail', {
+          product: product,
+          images: images,
+          pageTitle: product.title,
+          path: '/products'
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
     })
     .catch(err => {
@@ -35,20 +66,28 @@ exports.getProduct = (req, res, next) => {
     });
 };
 
-exports.getIndex = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      res.render('shop/index', {
+
+exports.getIndex = async (req, res, next) => {
+  try{
+    let imagesArr = [];
+    let products = await Product.find();
+    for (product of products){
+      let images = await Image.find({productId: product._id})
+      if(images && images.length >0) imagesArr.push(images[0]);
+    }
+    console.log("shop", imagesArr);
+      return res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
-        path: '/'
+        path: '/',
+        images: imagesArr
       });
-    })
-    .catch(err => {
+  }
+   catch(err){
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+  }
 };
 
 exports.getCart = (req, res, next) => {

@@ -1,18 +1,91 @@
 <%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            }
+
+            body {
+            margin: 0;
+            font-family: Arial;
+            }
+        .main-content{
+            position: relative;
+        }
+        .single-image-view{
+            position: relative;
+            width:50%;
+            height: 50px;
+        }
+        .single-image-view img{
+            width:100%;
+            position: absolute;
+        }
+        .horizontal_images{
+            text-align: center;
+            width: 50%;
+        }
+        .other-content{
+            float: right;
+            margin: 5% 20% 0% 0%;
+        }
+        .image {
+            float: left;
+            width: 25%;
+            padding: 10px;
+            }
+
+            /* Style the images inside the grid */
+            .image img {
+            opacity: 0.8; 
+            cursor: pointer; 
+            }
+
+            .image img:hover {
+            opacity: 1;
+            }
+
+            /* Clear floats after the columns */
+            .row:after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+
+    </style>
     </head>
 
     <body>
         <%- include('../includes/navigation.ejs') %>
-        <main class="centered">
-            <h1><%= product.title %></h1>
-            <hr>
-            <div class="image">
-                <img src="/<%= product.imageUrl %>" alt="<%= product.title %>">
+        <main class="main-content">
+            <div class="single-image-view" style = "">
+                <img src="/<%= images[0].imageUrl%>" alt="" >
             </div>
-            <h2><%= product.price %></h2>
-            <p><%= product.description %></p>
-            <% if (isAuthenticated) { %>
-                <%- include('../includes/add-to-cart.ejs', {product: product}) %>
-            <% } %>
+            <div class="horizontal_images row">
+                <% for (let image of images) { %>
+                    <div class="image">
+                        <img src="/<%= image.imageUrl %>" alt="<%= product.title %>">
+                    </div>
+                <% } %>
+            </div>   
+            <div class="other-content">
+                <h3><%= product.title %></h3>
+                    <% if ( product.currency === "1") { %>
+                        <span class="product__price">USD:</span>    
+                    <% } %>
+                    <% if( product.currency === "2"){%>
+                        <span class="product__price">BDT:</span>
+                    <% } %>
+                    <% if( product.currency === "3"){%>
+                        <span class="product__price">AED:</span>
+                    <% } %>
+                    <span class="product__price"><%= product.price %></span>
+                    <p class="product__description">
+                        <%= product.description %>
+                    </p>
+                <% if (isAuthenticated) { %>
+                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                <% } %>
+            </div>
         </main>
         <%- include('../includes/end.ejs') %>

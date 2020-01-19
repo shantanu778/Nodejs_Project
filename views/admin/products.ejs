@@ -1,5 +1,6 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/product.css">
+    
     </head>
 
     <body>
@@ -16,15 +17,24 @@
                                     </h1>
                                 </header>
                                 <% for (let image of images ) { %>
+                                    <% if (image.productId.toString() === product._id.toString()) { %>
                                 <div class="card__image">
                                     <img src="/<%= image.imageUrl %>" alt="<%= product.title %>">
                                 </div>
+                                    <% } %>
                                 <% } %>
                                 
                                 <div class="card__content">
-                                    <h2 class="product__price">$
-                                        <%= product.price %>
-                                    </h2>
+                                    <% if ( product.currency === "1") { %>
+                                        <span class="product__price">USD:</span>    
+                                    <% } %>
+                                    <% if( product.currency === "2"){%>
+                                        <span class="product__price">BDT:</span>
+                                    <% } %>
+                                    <% if( product.currency === "3"){%>
+                                        <span class="product__price">AED:</span>
+                                    <% } %>
+                                    <span class="product__price"><%= product.price %></span>
                                     <p class="product__description">
                                         <%= product.description %>
                                     </p>

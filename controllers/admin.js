@@ -18,11 +18,11 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-  console.log("Hello from POST ADD PRODUCT");
   console.log(req.files); 
   const title = req.body.title;
   const images = req.files;
   const price = req.body.price;
+  const currency = req.body.currency;
   const description = req.body.description;
   if (!images) {
     return res.status(422).render('admin/edit-product', {
@@ -33,7 +33,8 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description
+        description: description,
+        currency:currency
       },
       errorMessage: 'Attached file is not an image.',
       validationErrors: []
@@ -51,7 +52,8 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description
+        description: description,
+        currency: currency
       },
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array()
@@ -63,6 +65,7 @@ exports.postAddProduct = (req, res, next) => {
     title: title,
     price: price,
     description: description,
+    currency: currency,
     userId: req.user
   });
   product
@@ -78,7 +81,6 @@ exports.postAddProduct = (req, res, next) => {
         image
         .save()
         .then( result => {
-          console.log("Successfully Saved");
           res.redirect('/admin/products');
         })
         .catch( err => {
@@ -137,10 +139,10 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  console.log("Hello Update");
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
+  const updatedCurrency = req.body.currency;
   const image = req.file;
   const updatedDesc = req.body.description;
 
@@ -172,6 +174,7 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDesc;
+      product.currency = updatedCurrency
       if(image){
         product.imageUrl = image.path;
       }
@@ -195,16 +198,15 @@ exports.getProducts = async (req, res, next) => {
      for (product of products){
      let images = await Image.find({productId: product._id})
      if(images && images.length >0) imagesArr.push(images[0]);
-
-     console.log("Choosed Images", imagesArr); 
-
+    }
+    console.log(imagesArr);
      return res.render('admin/products', {
        pageTitle: 'Admin Product',
        path: '/admin/products',
        prods: products,
        images: imagesArr
      });
-  }
+  
 }
   catch(err){
      const error = new Error(err);

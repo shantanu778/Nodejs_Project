@@ -46,6 +46,14 @@
                     value="<% if (editing || hasError) { %><%= product.price %><% } %>">
             </div>
             <div class="form-control">
+                <label for="currency">Currency</label>
+                <select name="currency" id="currency">
+                    <option value="1">USD</option>
+                    <option value="2">BDT</option>
+                    <option value="3">AED</option>
+                </select>
+            </div>
+            <div class="form-control">
                 <label for="description">Description</label>
                 <textarea 
                     class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
