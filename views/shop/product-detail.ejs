@@ -14,43 +14,56 @@
         }
         .single-image-view{
             position: relative;
-            width:50%;
-            height: 50px;
+            margin: 0;
+            width:512px;
+            height: 300px;
         }
         .single-image-view img{
-            width:100%;
-            position: absolute;
+            margin: 0;
+            width: 100%;
         }
-        .horizontal_images{
+        .horizontal_images {
+            border: solid 1px #a394af;
+            border-radius: 10px;
+            position: absolute;
+            bottom: -60%;
             text-align: center;
+            height: 150px;
             width: 50%;
         }
+        .horizontal_images img {
+            width: 128px;
+            height: auto;
+            padding: 10px;
+        }
+
         .other-content{
-            float: right;
+            position: absolute;
+            right: 0;
+            top: 60px;
             margin: 5% 20% 0% 0%;
         }
         .image {
             float: left;
-            width: 25%;
             padding: 10px;
             }
 
-            /* Style the images inside the grid */
-            .image img {
-            opacity: 0.8; 
-            cursor: pointer; 
-            }
+        /* Style the images inside the grid */
+        .image img {
+        opacity: 0.8; 
+        cursor: pointer; 
+        }
 
-            .image img:hover {
-            opacity: 1;
-            }
+        .image img:hover {
+        opacity: 1;
+        }
 
-            /* Clear floats after the columns */
-            .row:after {
-            content: "";
-            display: table;
-            clear: both;
-            }
+        /* Clear floats after the columns */
+        .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        }
 
     </style>
     </head>
@@ -61,11 +74,9 @@
             <div class="single-image-view" style = "">
                 <img src="/<%= images[0].imageUrl%>" alt="" >
             </div>
-            <div class="horizontal_images row">
+            <div class="horizontal_images">
                 <% for (let image of images) { %>
-                    <div class="image">
                         <img src="/<%= image.imageUrl %>" alt="<%= product.title %>">
-                    </div>
                 <% } %>
             </div>   
             <div class="other-content">
@@ -88,4 +99,7 @@
                 <% } %>
             </div>
         </main>
+        <script>
+
+        </script>
         <%- include('../includes/end.ejs') %>
