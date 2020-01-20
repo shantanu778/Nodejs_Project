@@ -143,11 +143,12 @@ exports.postEditProduct = (req, res, next) => {
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
   const updatedCurrency = req.body.currency;
-  const image = req.file;
+  const updatedimages = req.files;
   const updatedDesc = req.body.description;
 
+  //console.log(updatedimages);
   const errors = validationResult(req);
-  console.log(errors.array());
+  //console.log("Errors on Edit Product", errors.array());
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-product', {
@@ -175,11 +176,21 @@ exports.postEditProduct = (req, res, next) => {
       product.price = updatedPrice;
       product.description = updatedDesc;
       product.currency = updatedCurrency
-      if(image){
-        product.imageUrl = image.path;
+      if(updatedimages){
+        Image.find({productId: prodId})
+        .then(images => {
+          for(let [i,image] of images.entries()){
+            console.log(i, image);
+            if(!updatedimages[i]){
+              return;
+            }
+            image.imageUrl = updatedimages[i].path
+            image.save()
+          }
+        })
       }
       return product.save().then(result => {
-        console.log('UPDATED PRODUCT!');
+        //console.log('UPDATED PRODUCT!');
         res.redirect('/admin/products');
       });
     })
