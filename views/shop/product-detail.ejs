@@ -28,7 +28,7 @@
             position: absolute;
             bottom: -60%;
             text-align: center;
-            height: 150px;
+            height: 100px;
             width: 50%;
         }
         .horizontal_images img {
@@ -43,18 +43,18 @@
             top: 60px;
             margin: 5% 20% 0% 0%;
         }
-        .image {
+        .horizontal_images {
             float: left;
             padding: 10px;
             }
 
         /* Style the images inside the grid */
-        .image img {
+        .horizontal_images img {
         opacity: 0.8; 
         cursor: pointer; 
         }
 
-        .image img:hover {
+        .horizontal_images img:hover {
         opacity: 1;
         }
 
@@ -64,6 +64,9 @@
         display: table;
         clear: both;
         }
+        .selectedImage{
+            border: solid 2px rgb(1, 32, 66);
+        }
 
     </style>
     </head>
@@ -72,7 +75,7 @@
         <%- include('../includes/navigation.ejs') %>
         <main class="main-content">
             <div class="single-image-view" style = "">
-                <img src="/<%= images[0].imageUrl%>" alt="" >
+                <img id="single-image" src="/<%= images[0].imageUrl%>" alt="" >
             </div>
             <div class="horizontal_images">
                 <% for (let image of images) { %>
@@ -99,7 +102,24 @@
                 <% } %>
             </div>
         </main>
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script>
+            $(document).ready(function(){
 
+                $(".horizontal_images").children("img").eq(0).addClass("selectedImage");
+                
+                $(".horizontal_images").children("img").click(function(){
+                    if($(this).hasClass("selectedImage")){
+                      return;  
+                    }
+                    $(".horizontal_images").children("img").removeClass("selectedImage");
+                    $(this).addClass("selectedImage");
+                    var source = $(this).attr("src");
+                    $("#single-image").fadeOut(200, function(){
+                        $(this).attr("src", source).fadeIn(300);
+                    });
+                });
+
+            });
         </script>
         <%- include('../includes/end.ejs') %>
