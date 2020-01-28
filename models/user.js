@@ -21,28 +21,34 @@ const userSchema = new Schema({
           ref: 'Product',
           required: true
         },
-        quantity: { type: Number, required: true }
+        quantity: { type: Number, required: true },
+        price: {type: Number, required: true}
       }
     ]
   }
 });
 
-userSchema.methods.addToCart = function(product) {
+userSchema.methods.addToCart = function(product,price, qty) {
   const cartProductIndex = this.cart.items.findIndex(cp => {
     return cp.productId.toString() === product._id.toString();
   });
-  let newQuantity = 1;
+  let newQuantity = qty;
+  let newPrice = newQuantity * price;
   const updatedCartItems = [...this.cart.items];
 
   if (cartProductIndex >= 0) {
-    newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+    newQuantity = this.cart.items[cartProductIndex].quantity + qty;
     updatedCartItems[cartProductIndex].quantity = newQuantity;
+    newPrice = this.cart.items[cartProductIndex].price + newPrice;
+    updatedCartItems[cartProductIndex].price = newPrice;
   } else {
     updatedCartItems.push({
       productId: product._id,
-      quantity: newQuantity
+      quantity: newQuantity,
+      price: newPrice
     });
   }
+  console.log(typeof(price));
   const updatedCart = {
     items: updatedCartItems
   };

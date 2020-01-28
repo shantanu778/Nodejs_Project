@@ -113,10 +113,11 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  console.log(prodId);
+  const quantity = parseInt(req.body.quantity);
   Product.findById(prodId)
     .then(product => {
-      return req.user.addToCart(product);
+      console.log(product.price);
+      return req.user.addToCart(product, product.price, quantity);
     })
     .then(result => {
       console.log(result);

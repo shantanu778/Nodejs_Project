@@ -1,5 +1,9 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/product.css">
+    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>-->
+   <style>
+   
+   </style>
 </head>
 
 <body>
@@ -26,9 +30,11 @@
                         </div>
                         <div class="card__actions">
                             <a href="/products/<%= product._id %>" class="btn">Details</a>
-                            <% if (isAuthenticated) { %>
+                            <!--
+                                <% if (isAuthenticated) { %>
                                 <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                             <% } %>
+                            -->                            
                         </div>
                     </article>
                 <% } %>
@@ -37,4 +43,5 @@
             <h1>No Products Found!</h1>
         <% } %>
     </main>
+   
 <%- include('../includes/end.ejs') %>
